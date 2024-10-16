@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+    <title>Customers</title>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div th:fragment="fragmentContent">
+    <h3 class="mb-3 ">Customer List</h3>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Filter Form -->
+            <form method="get" action="#" class="mb-3 form-control">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" name="phoneNumber"
+                               placeholder="Phone Number" th:value="${phoneNumber}">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" name="meterNumber"
+                               placeholder="Meter Number" th:value="${meterNumber}">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" name="status">
+                            <option value="">-- Select Status --</option>
+                            <option th:selected="${status == 'ACTIVE'}" value="ACTIVE">ACTIVE</option>
+                            <option th:selected="${status == 'DISCONTINUED'}" value="DISCONTINUED">DISCONTINUED</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </form>
+            <!-- Customer Table -->
+            <table class="table table-hover table-bordered table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Phone Number</th>
+                    <th>Kebele</th>
+                    <th>House Number</th>
+                    <th>Category</th>
+                    <th>Meter Number</th>
+                    <th>Bill Number</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="customer : ${customerPage.content}">
+                    <td th:text="${customer.name}">Customer Name</td>
+                    <td th:text="${customer.phoneNumber}">Phone Number</td>
+                    <td th:text="${customer.kebele}">Kebele</td>
+                    <td th:text="${customer.houseNumber}">House Number</td>
+                    <td th:text="${customer.customerCategory}">Category</td>
+                    <td th:text="${customer.meter}">Meter</td>
+                    <td th:text="${customer.billNumber}">Bill Number</td>
+                    <td th:text="${customer.serviceStatus}">Status</td>
+                    <td class="text-center">
+                        <a th:href="@{'/customers/edit/' + ${customer.id}}" class="btn btn-sm btn-warning">Edit</a>
+                     <!--   <a th:href="@{'/customers/delete/' + ${customer.id}}" class="btn btn-sm btn-danger ml-2">Delete</a>
+                        -->
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Message for Empty List -->
+            <div th:if="${#lists.isEmpty(customerPage.content)}" class="alert alert-info text-center">
+                No customers found.
+            </div>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/customers(page=${currentPage - 1}, size=${10}, phoneNumber=${phoneNumber}, meterNumber=${meterNumber}, status=${status})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${pageNum == currentPage} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/customers(page=${pageNum}, size=${10}, phoneNumber=${phoneNumber}, meterNumber=${meterNumber}, status=${status})}" th:text="${pageNum + 1}">1</a>
+                    </li>
+                    <li th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/customers(page=${currentPage + 1}, size=${10}, phoneNumber=${phoneNumber}, meterNumber=${meterNumber}, status=${status})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

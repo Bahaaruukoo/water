@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4 text-center" th:text="${meterReading.id != null ? 'Edit Meter Reading' : 'New Meter Reading'}"></h2>
+
+            <!-- Form for Adding/Editing Meter Reading -->
+            <form th:action="@{/readings/save}" th:object="${meterReading}" method="post" class="form-control p-4">
+                <!-- Hidden ID Field -->
+                <input type="hidden" th:field="*{id}" />
+
+                <!-- Meter Value Field -->
+                <div class="form-group mb-3">
+                    <label for="meterValue" class="form-label">Meter Reading Value:</label>
+                    <input type="number" id="meterValue" class="form-control" th:field="*{meterValue}" placeholder="Enter meter reading" required />
+                </div>
+
+                <!-- Meter Dropdown -->
+                <div class="form-group mb-3">
+                    <label for="meter" class="form-label">Meter:</label>
+                    <select id="meter" class="form-select" th:field="*{meter}" required>
+                        <option value="" disabled selected>Select Meter</option>
+                        <option th:each="meter : ${meters}" th:value="${meter.id}" th:text="${meter.meterNumber}"></option>
+                    </select>
+                </div>
+
+                <!-- Submit and Cancel Buttons -->
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                    <a th:href="@{/readings}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

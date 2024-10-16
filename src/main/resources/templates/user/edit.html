@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<br />
+<br />
+<div class="" th:fragment="fragmentContent">
+    <div class="card">
+        <div th:if="${param.success}">
+            <div class="alert alert-info">You've successfully updated.</div>
+        </div>
+        <div class="card-header color-dark">
+            <h2 class="text-center ">Edit User</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" role="form" th:action="@{/edit/{userId}(userId=${user.id})}" th:object="${user}">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="form-label">First Name</label>
+                            <input class="form-control" id="firstName" name="firstName"
+                                   placeholder="Enter first name" th:field="*{firstName}" type="text" required />
+                            <p th:errors="*{firstName}" class="text-danger"
+                               th:if="${#fields.hasErrors('firstName')}">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input class="form-control" id="lastName" name="lastName" placeholder="Enter last name"
+                                   th:field="*{lastName}" type="text" required />
+                            <p th:errors="*{lastName}" class="text-danger" th:if="${#fields.hasErrors('lastName')}">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Gender</label>
+                                    <select class="selectpicker form-control" id="gender" name="gender" th:field="*{gender}"
+                                            required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <p th:errors="*{gender}" class="text-danger" th:if="${#fields.hasErrors('gender')}">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Age</label>
+                                    <input class="form-control" id="age" name="age" placeholder="Enter your age"
+                                           th:field="*{age}" type="number" required />
+                                    <p th:errors="*{age}" class="text-danger" th:if="${#fields.hasErrors('age')}">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Address</label>
+                            <input class="form-control" id="address" name="address" placeholder="Enter your address"
+                                   th:field="*{address}" type="text" required />
+                            <p th:errors="*{address}" class="text-danger" th:if="${#fields.hasErrors('address')}">
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Email</label>
+                                <input class="form-control" id="email" name="email" placeholder="Enter email address"
+                                       th:field="*{email}" type="email" />
+                                <p th:errors="*{email}" class="text-danger" th:if="${#fields.hasErrors('email')}">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Phone</label>
+                                <input class="form-control" id="phone" name="phone"
+                                       placeholder="Enter your phone number" th:field="*{phone}" type="text" required />
+                                <p th:errors="*{phone}" class="text-danger" th:if="${#fields.hasErrors('phone')}">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Role Dropdown -->
+                <div class="form-group mb-3">
+                    <label for="rols">Roles (At least one role should be selected)</label>
+                    <select id="rols" class="form-control" th:field="*{roles}" multiple="multiple" >
+                        <option th:each="role : ${allRoles}"
+                                th:value="${role.id}"
+                                th:text="${role.name}"
+                                th:selected="${userRoles.contains(role)}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function makeEmailReadonlyOnLoad() {
+        var field = document.getElementById("email");
+        field.readOnly = true;
+    }
+    window.onload = makeEmailReadonlyOnLoad;
+</script>
+</body>
+</html>

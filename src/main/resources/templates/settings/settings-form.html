@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div th:fragment="fragmentContent">
+    <h3 th:text="${setting.id != null ? 'Edit Setting' : 'New Setting'}"></h3>
+    <form th:action="@{/settings/save}" th:object="${setting}" method="post" class="form-control mt-3 ">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{reportGenerationTimeHour}" />
+        <input type="hidden" th:field="*{reportGenerationTimeMinute}" />
+        <input type="hidden" th:field="*{reportGenerationFrequency}" />
+        <input type="hidden" th:field="*{billGenerationFrequency}" />
+
+        <div class="form-group mt-2">
+            <label for="dueDateAfter">Due Date After (Days):</label>
+            <input type="number" id="dueDateAfter" class="" th:field="*{dueDateAfter}"  min="1" required />
+        </div>
+        <div class="form-group mt-2">
+            <label for="meterRentalPrice">Meter Rental (Birr):</label>
+            <input type="number" id="meterRentalPrice" class="" th:field="*{meterRentalPrice}" step="0.01" min="0" required />
+        </div>
+        <div class="form-group mt-2">
+            <label for="latePaymentFee">Late Payment Fee (Per Days):</label>
+            <input type="number" id="latePaymentFee" class="" th:field="*{latePaymentFee}" step="0.01" min="0" required />
+        </div>
+        <div class="form-group mt-2">
+            <label for="serviceCharge">Service Fee:</label>
+            <input type="number" id="serviceCharge" class="" th:field="*{serviceCharge}" step="0.01" min="0" required />
+        </div>
+        <div class="form-group mt-2">
+            <label for="rejectLessReading">Reject Less Than Previous Reading:</label>
+            <select id="rejectLessReading" th:field="*{rejectLessReading}" required>
+                <option th:value="true" th:text="'True'" ></option>
+                <option th:value="false" th:text="'False'" ></option>
+            </select>
+        </div>
+
+        <div class="form-group mt-2">
+            <label for="manualBillGeneration">Manual Bill Generation:</label>
+            <select id="manualBillGeneration" th:field="*{manualBillGeneration}" required>
+                <option th:value="true" th:text="'Enable'" ></option>
+                <option th:value="false" th:text="'Disable'" ></option>
+            </select>
+        </div>
+        <div class="mt-5">
+            <button type="submit" class="btn btn-success px-3 me-4">Save</button>
+            <a th:href="@{/settings}" class="btn btn-secondary">Cancel</a>
+        </div>
+
+        <footer th:replace="~{base :: base_footer}"></footer>
+    </form>
+</div>
+</body>
+</html>

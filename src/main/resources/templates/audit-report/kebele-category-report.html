@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Analysis Sheet</title>
+    <header th:replace="~{base :: base_head}"></header>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+    <h3>Analysis Sheet</h3>
+
+    <table class="table table-hover table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Kebele</th>
+            <th>Customer Category</th>
+            <th>No of Bills</th>
+            <th>Min Bill (Birr)</th>
+            <th>Max Bill (Birr)</th>
+            <th>Meter Rent</th>
+            <th>Tariff Amount</th>
+            <th>Service Charge</th>
+            <th>Penalty</th>
+            <th>Total Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reportItem : ${report}">
+            <td th:text="${reportItem.kebele}">Kebele</td>
+            <td th:text="${reportItem.customerCategory}">Customer Category</td>
+            <td th:text="${reportItem.billCount}">No of Bills</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(reportItem.minBillAmount, 1, 2)}">Min Bill </span>
+            </td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(reportItem.maxBillAmount, 1, 2)}">Max Bill </span>
+                <!--(<span th:text="${reportItem.maxBillNumber}">Bill Number</span>) -->
+            </td>
+            <td th:text="${#numbers.formatDecimal(reportItem.totalMeterRent, 1, 2)}">Meter Rent</td>
+            <td th:text="${#numbers.formatDecimal(reportItem.totalBillAmount, 1, 2)}">Tariff Amount</td>
+            <td th:text="${#numbers.formatDecimal(reportItem.totalServiceCharge, 1, 2)}">Service Charge</td>
+            <td th:text="${#numbers.formatDecimal(reportItem.totalPenalty, 1, 2)}">Penalty</td>
+            <td th:text="${#numbers.formatDecimal(reportItem.grandTotal, 1, 2)}">Total Amount</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{base :: base_footer}" class="mt-5"></footer>
+</body>
+</html>

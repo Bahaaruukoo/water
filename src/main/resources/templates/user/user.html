@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+    <div class="row">
+        <h3>User List</h3>
+    </div>
+
+    <!-- Display error message if available -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Display success message if available -->
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <!-- Table showing users and their roles -->
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th> <!-- Changed from Role to Roles -->
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through each user in the list -->
+        <tr th:each="user : ${users}">
+            <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+
+            <!-- Loop through the user's roles and display them as a comma-separated string -->
+            <td>
+                <p th:each="role, roleStat : ${user.roles}" th:text="${role}" th:unless="${roleStat.last}">[[${role.name}]], </p>
+                <p th:each="role, roleStat : ${user.roles}" th:text="${role}" th:if="${roleStat.last}">[[${role.name}]], </p>
+            </td>
+
+
+            <td>
+                <a th:href="@{/edit/{userId}(userId=${user.id})}" class="btn btn-primary btn-sm edit">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a th:href="@{/users/delete/{userId}(userId=${user.id})}" class="btn btn-danger btn-sm delete"
+                   onclick="return confirm('Are you sure you want to generate bill for the reading?');">
+
+                    <i class="fas fa-trash-alt"></i> Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+
+</html>

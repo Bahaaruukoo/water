@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+  <title> Customer</title></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div th:fragment="fragmentContent">
+  <h3 th:text="${meter.id != null ? 'Edit Meter' : 'Add New Meter'}"></h3>
+  <form th:action="@{/meters/save}" th:object="${meter}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+
+    <!-- Other Fields -->
+    <div class="row">
+      <div class="col-6">
+        <div class="form-group">
+          <label for="meterNumber">Meter Number</label>
+          <input type="text" id="meterNumber" th:field="*{meterNumber}" class="form-control" required />
+          <p th:errors="*{meterNumber}" class="text-danger" th:if="${#fields.hasErrors('meterNumber')}">
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label for="meterSize">Meter Size</label>
+          <input type="text" id="meterSize" th:field="*{meterSize}" class="form-control" required />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="form-group">
+          <label for="initialReading">Initial Meter Reading</label>
+          <input type="text" id="initialReading" th:field="*{initialReading}" class="form-control" required />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label for="brand">Brand</label>
+          <input type="text" id="brand" th:field="*{brand}" class="form-control" required />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="form-group">
+          <label for="model">Model</label>
+          <input type="text" id="model" th:field="*{model}" class="form-control" required />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label for="meterColor">Meter Color</label>
+          <input type="text" id="meterColor" th:field="*{meterColor}" class="form-control" required />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6">
+          <label for="stockedDate">Stocked Date</label>
+          <input type="date" id="stockedDate" th:field="*{stockedDate}" class="form-control" required />
+      </div>
+
+        <!-- Status Dropdown -->
+      <div class="form-group col-6">
+          <label for="status">Status</label>
+          <select id="status" th:field="*{status}" class="form-control" required>
+            <option th:each="status : ${meterStatuses}"
+                    th:value="${status}"
+                    th:text="${status}">Status</option>
+          </select>
+      </div>
+    </div>
+    <div class="my-2">
+      <button type="submit" class="btn btn-primary me-5">Save</button>
+      <a th:href="@{/meters}" class="btn btn-secondary ">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+  <title>Sold Bill Reports</title>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+  <h3>Sold Bill Reports</h3>
+
+  <form th:action="@{/reports/list}" method="get" class="form-inline form-control mb-1">
+    <div class="row">
+      <div class="col-2">
+        <!-- Filter by Status -->
+        <div class="form-group mr-1">
+          <label for="status">Status:</label>
+          <select name="status" id="status" class="form-control ml-2">
+            <option value="PENDING">All</option>
+            <option value="SUBMITTED" selected>Submitted</option>
+            <option value="AUDITED">Audited</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-4 d-flex  ">
+        <!-- Filter by Date Range -->
+        <div class="form-group col-6">
+          <label for="endDate">Report Date:</label>
+          <input type="date" id="endDate" name="endDate" class="form-control ">
+        </div>
+      </div>
+      <div class="col-5 mr-1 d-flex">
+        <div class="row">
+          <!-- Filter by Total Collection Amount -->
+          <div class="form-group mr-1 col-6">
+            <label for="minCollection">Min Collection:</label>
+            <input type="number" id="minCollection" name="minCollection" class="form-control " step="0.01">
+          </div>
+          <div class="form-group col-6">
+            <label for="maxCollection">Max Collection:</label>
+            <input type="number" id="maxCollection" name="maxCollection" class="form-control " step="0.01">
+          </div>
+        </div>
+      </div>
+      <div class="col-1">
+        <button type="submit" class="btn btn-primary mt-4">Filter</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Reports Table -->
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Cashier</th>
+      <th scope="col">Report Date</th>
+      <th scope="col">Total Collection</th>
+      <th scope="col">Status</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="report : ${reports}">
+      <td th:text="${report.cashier.name}"></td>
+      <td th:text="${report.endDate.format(T(java.time.format.DateTimeFormatter).ofPattern('dd-MM-yyyy'))}"></td>
+      <td th:text="${report.totalCollection}"></td>
+      <td th:text="${report.status}"></td>
+      <td>
+        <a class="btn btn-info" th:href="@{/reports/view/{id}(id=${report.id})}">View</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination (optional) -->
+  <!--
+  <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+          <li class="page-item" th:classappend="${reports.hasPrevious() ? '' : 'disabled'}">
+              <a class="page-link" th:href="@{/reports/list(page=${reports.number - 1})}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+              </a>
+          </li>
+          <li class="page-item" th:each="i : ${#numbers.sequence(0, reports.totalPages - 1)}"
+              th:classappend="${i == reports.number} ? 'active'">
+              <a class="page-link" th:href="@{/reports/list(page=${i})}" th:text="${i + 1}">1</a>
+          </li>
+          <li class="page-item" th:classappend="${reports.hasNext() ? '' : 'disabled'}">
+              <a class="page-link" th:href="@{/reports/list(page=${reports.number + 1})}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+              </a>
+          </li>
+      </ul>
+  </nav>
+  -->
+
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

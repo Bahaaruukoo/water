@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{base :: base_head}">
+  <title>Bill List</title>
+</head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+  <h3 class="mb-1">Bill List</h3>
+
+  <!-- Filter Form -->
+  <form th:action="@{/billing}" method="get" class="form-inline mb-2 form-control">
+    <div class="row ">
+      <div class="col-2">
+        <div class="form-group mr-2">
+          <input type="text" name="billNumber" class="form-control" placeholder="Filter by Bill Number"
+                 th:value="${billNumber}" />
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="form-group mr-2">
+          <select name="status" class="form-control">
+            <option value="">Filter by Status</option>
+            <option value="SOLD" th:selected="${status == 'SOLD'}">SOLD</option>
+            <option value="UNSOLD" th:selected="${status == 'UNSOLD'}">UNSOLD</option>
+            <option value="VOIDED" th:selected="${status == 'VOIDED'}">VOIDED</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Table to Display Bills -->
+  <table class="table table-hover table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th scope="col">Bill Number</th>
+      <th scope="col">Prev Reading</th>
+      <th scope="col">Meter Reading</th>
+      <th scope="col">Bill Amount(Birr)</th>
+      <th scope="col">Due Date</th>
+      <th scope="col">Status</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bill : ${billPage.content}">
+      <td th:text="${bill.billNumber}">Bill Number</td>
+      <td th:text="${bill.previousReading}">Prev Reading</td>
+      <td th:text="${bill.currentReading}">Meter Reading</td>
+      <td th:text="${bill.totalBill}">Bill Amount(Birr)</td>
+      <td th:text="${bill.dueDate}">Due Date</td>
+      <td th:text="${bill.status}">Status</td>
+
+      <td th:if="${bill.status == T(com.UserManagement.enums.BillPaymentStatus).SOLD}" class="text-center">
+        <a class="btn btn-info btn-sm" th:href="@{'/billing/view/' + ${bill.id}}" >Detail</a>
+      </td>
+      <td th:if="${bill.status == T(com.UserManagement.enums.BillPaymentStatus).UNSOLD}" class="text-center">
+        <a class="btn btn-info btn-sm" th:href="@{'/billing/view/' + ${bill.id}}">Detail</a>
+        <a class="btn btn-warning btn-sm"
+           th:href="@{'/billing/void/' + ${bill.id}}"
+           sec:authorize="hasAnyRole('ROLE_MANAGER')"
+           onclick="return confirm('Are you sure you want to VOID the bill?');"
+        >Void</a>
+      </td>
+      <td th:if="${bill.status == T(com.UserManagement.enums.BillPaymentStatus).VOIDED}" class="text-center">
+        <a class="btn btn-secondary disabled">Bill Voided</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <li th:classappend="${currentPage == 0} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/billing(page=${currentPage - 1}, size=${10})}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+
+      <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+          th:classappend="${pageNum == currentPage} ? 'active' : ''">
+        <a class="page-link" th:href="@{/billing(page=${pageNum}, size=${10})}" th:text="${pageNum + 1}">1</a>
+      </li>
+      <li th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/billing(page=${currentPage + 1}, size=${10})}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<footer th:replace="~{base :: base_footer}" class="mt-5"></footer>
+
+</body>
+</html>

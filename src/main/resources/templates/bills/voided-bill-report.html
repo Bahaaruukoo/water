@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bill Report</title>
+    <header th:replace="~{base :: base_head}"></header>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+    <h3>Voided Bills</h3>
+
+    <!-- Dropdown for Month and Year Selection -->
+    <form method="get" action="/billing/reports/voided" class="form-inline mb-3 form-control d-flex">
+        <label for="month" class="mt-2">Select Month:</label>
+        <select id="month" name="month" class="form-select mx-3" style="width: 200px;" >
+            <!-- Default empty option -->
+            <option value="" th:selected="${selectedMonth == null}" >Select a month</option>
+
+            <option th:each="i : ${#numbers.sequence(1, 12)}"
+                    th:value="${i}"
+                    th:text="${T(java.time.Month).of(i).getDisplayName(T(java.time.format.TextStyle).FULL, T(java.util.Locale).getDefault())}"
+                    th:selected="${i == selectedMonth}">
+            </option>
+        </select>
+
+        <label for="year" class="mt-2">Select Year:</label>
+        <select id="year" name="year" class="form-select mx-3" style="width: 200px;" required>
+            <option th:each="i : ${#numbers.sequence(2020, T(java.time.LocalDate).now().getYear())}"
+
+                    th:value="${i}"
+                    th:text="${i}"
+                    th:selected="${i == selectedYear}">
+            </option>
+        </select>
+
+        <button type="submit" class="btn btn-primary mt-2">Filter</button>
+    </form>
+
+    <!-- Bill Report Table -->
+    <table class="table table-bordered table-hover mt-4">
+        <thead class="table-dark">
+        <tr>
+            <th>Bill No.</th>
+            <th>Customer Name</th>
+            <th>Kebele</th>
+            <th>Meter No.</th>
+            <th>Meter Size</th>
+            <th>Prev. Reading</th>
+            <th>Curr. Reading</th>
+            <th>Cons.</th>
+            <th>Cons. Cost</th>
+            <th>Total Cost</th>
+            <th>Bill Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bill : ${bills}">
+            <td th:text="${bill.billNumber}">Bill Number</td>
+            <td th:text="${bill.customer.name}">Customer Name</td>
+            <td th:text="${bill.customer.kebele}">Kebele</td>
+            <td th:text="${bill.customer.meter.meterNumber}">Meter No.</td>
+            <td th:text="${bill.customer.meter.meterSize}">Meter Size</td>
+            <td th:text="${bill.previousReading}">Previous Reading</td>
+            <td th:text="${bill.currentReading}">Current Reading</td>
+            <td th:text="${bill.consumption}">Cons.</td>
+            <td th:text="${bill.amount}">Cons. Cost</td>
+            <td th:text="${bill.totalBill}">Total Cost</td>
+            <td th:text="${bill.status}">Bill Status</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr class="table-secondary">
+            <th colspan="7">Total</th>
+            <th th:text="${totalConsumption}">Cons.</th>
+            <th th:text="${totalAmount}">Cons. Cost</th>
+            <th th:text="${totalBill}">Total Cost</th>
+            <th></th>
+        </tr>
+        </tfoot>
+    </table>
+
+    <!-- Export to PDF Button -->
+    <form method="get" action="/billing/reports/voided/export-pdf">
+        <input type="hidden" name="month" th:value="${selectedMonth}" />
+        <input type="hidden" name="year" th:value="${selectedYear}" />
+        <button type="submit" class="btn btn-danger mt-2">Export as PDF</button>
+    </form>
+
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

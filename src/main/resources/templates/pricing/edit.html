@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<!-- Bootstrap CSS -->
+<head th:replace="~{base :: base_head}">
+  <title>Edit Pricing</title>
+</head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+<div class="" th:fragment="fragmentContent">
+
+<h3>Edit Pricing</h3>
+<form th:action="@{/pricing/edit/{id}(id=${pricing.id})}" th:object="${pricing}" method="post">
+  <input type="hidden" th:field="*{customerCategory}" />
+
+  <table class="table ">
+    <thead class="table-dark">
+    <tr><th>Field</th> <th>Value</th>
+
+    </thead>
+    <tbody>
+    <tr>
+      <td>Customer Category</td>
+      <td th:text="*{customerCategory}">
+    </td>
+    </tr>
+    <tr> <td>Block One ( 0 - 5 )</td> <td > <input type="number" th:field="*{blockOne}" step="0.01" min="0"/> </td></tr>
+    <tr> <td>Block Two ( 6 - 10 )</td> <td > <input type="number" th:field="*{blockTwo}" step="0.01" min="0"/> </td></tr>
+    <tr> <td>Block Three ( 11 - 15 )</td> <td > <input type="number" th:field="*{blockThree}" step="0.01" min="0"/> </td></tr>
+    <tr> <td>Block Four ( 16 - 20 )</td> <td > <input type="number" th:field="*{blockFour}" step="0.01" min="0"/> </td></tr>
+    <tr> <td>Block Five ( 21 - 25 )</td> <td > <input type="number" th:field="*{blockFive}" step="0.01" min="0"/> </td></tr>
+    <tr> <td>Block Six ( >25 )</td> <td > <input type="number" th:field="*{blockSix}" step="0.01" min="0"/> </td></tr>
+
+     <tr>
+      <td>
+        <button type="submit">Update Pricing</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</form>
+
+<a href="/pricing">Back to List</a>
+</div>
+</body>
+
+</html>

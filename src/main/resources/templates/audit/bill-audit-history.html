@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bill Audit History</title>
+    <header th:replace="~{base :: base_head}"></header>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="container mt-4">
+    <h2>Audit History for Bill ID: <span th:text="${billId}"></span></h2>
+
+    <table class="table table-bordered mt-3">
+        <thead class="thead-dark">
+        <tr>
+            <th>Revision</th>
+            <th>Timestamp</th>
+            <th>Operation</th>
+            <th>Modified Fields</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="audit : ${auditHistory}">
+            <td th:text="${audit[0]}">Revision Number</td>
+            <td th:text="${#dates.format(audit[1], 'yyyy-MM-dd HH:mm:ss')}">Timestamp</td>
+            <td th:text="${audit[2] == 'ADD' ? 'Created' : audit[2] == 'MOD' ? 'Modified' : 'Deleted'}">Operation</td>
+            <td th:text="${audit[3]}">Modified Fields</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/billing" class="btn btn-primary mt-3">Back to Billing</a>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

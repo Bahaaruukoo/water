@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="container mt-5">
+  <h2>Meter Readings</h2>
+
+  <!-- Table to display existing meter readings -->
+  <div class="mb-4">
+    <h4>Existing Meter Readings</h4>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Reading Date</th>
+        <th>Meter Value</th>
+        <th>Reader</th>
+        <th>Meter ID</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="reading : ${meterReadings}">
+        <td th:text="${reading.id}">1</td>
+        <td th:text="${#dates.format(reading.readingDate, 'yyyy-MM-dd HH:mm:ss')}">2024-09-25 14:30:00</td>
+        <td th:text="${reading.meterValue}">123.45</td>
+        <td th:text="${reading.reader.firstName + ' ' + reading.reader.lastName}">John Doe</td>
+        <td th:text="${reading.meter.meterNumber}">987654321</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Form to add new meter reading -->
+  <div class="mb-4">
+    <h4>Add New Meter Reading</h4>
+    <form th:action="@{/meter-readings/add}" method="post">
+      <div class="mb-3">
+        <label for="meterId" class="form-label">Meter</label>
+        <select id="meterId" name="meterId" class="form-select" required>
+          <option value="" disabled selected>Select a meter</option>
+          <option th:each="meter : ${meters}" th:value="${meter.id}" th:text="${meter.meterNumber}"></option>
+        </select>
+      </div>
+
+
+      <div class="mb-3">
+        <label for="meterValue" class="form-label">Meter Value</label>
+        <input type="number" step="0.01" id="meterValue" name="meterValue" class="form-control" placeholder="Enter meter value" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Add Meter Reading</button>
+    </form>
+  </div>
+</div>
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

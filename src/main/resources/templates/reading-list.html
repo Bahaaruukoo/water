@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="container">
+    <h2>Meter Reading List</h2>
+    <a th:href="@{/reading/new}">Add New Reading</a>
+    <table>
+        <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Meter Number</th>
+            <th>Reading Date</th>
+            <th>Reading Value</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reading : ${readings}">
+            <td th:text="${reading.customer.name}">Customer</td>
+            <td th:text="${reading.meterNumber}">Meter Number</td>
+            <td th:text="${reading.readingDate}">Reading Date</td>
+            <td th:text="${reading.readingValue}">Reading Value</td>
+            <td>
+                <a th:href="@{'/reading/edit/' + ${reading.id}}">Edit</a> |
+                <a th:href="@{'/reading/delete/' + ${reading.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

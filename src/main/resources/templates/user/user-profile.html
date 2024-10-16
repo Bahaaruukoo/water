@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+    <title>User Profile</title>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+    <h2>User Profile</h2>
+    <div th:if="${message}" class="alert alert-success" role="alert">
+        <span th:text="${message}"></span>
+    </div>
+
+    <div>
+        <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${user.phone}"></span></p>
+        <p><strong>Gender:</strong> <span th:text="${user.gender}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${user.address}"></span></p>
+        <strong>Roles:</strong>
+
+        <ol>
+            <li th:each="role : ${user.roles}" th:if="${role.name == 'ROLE_ADMIN'}">ADMIN</li>
+            <li th:each="role : ${user.roles}" th:if="${role.name == 'ROLE_CASHIER'}">CASHIER</li>
+            <li th:each="role : ${user.roles}" th:if="${role.name == 'ROLE_READER'}">READER</li>
+            <li th:each="role : ${user.roles}" th:if="${role.name == 'ROLE_MANAGER'}">MANAGER</li>
+            <li th:each="role : ${user.roles}" th:if="${role.name == 'ROLE_USER'}">USER</li>
+            <li th:each="role : ${user.roles}" th:if="${role.name == 'ROLE_PAYROLL'}">PAYROLL</li>
+        </ol>
+
+    </div>
+
+    <!-- Edit Button -->
+    <div class="mt-3">
+        <a class="btn btn-primary" th:href="@{/user/edit}">Edit Profile</a>
+    </div>
+    <!-- change password button -->
+    <div class="mt-3">
+        <a class="btn btn-outline-danger" th:href="@{/change-password}">Change Password</a>
+    </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

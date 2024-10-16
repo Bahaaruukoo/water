@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4 text-center" th:text="${meterReading.id != null ? 'Edit Meter Reading' : 'New Meter Reading'}"></h2>
+
+            <!-- Form for Adding/Editing Meter Reading -->
+            <form th:action="@{/readings/update}" th:object="${meterReading}" method="post" class="form-control p-4">
+                <!-- Hidden ID Field -->
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{readingDate}" />
+                <input type="hidden" th:field="*{reader}" />
+                <input type="hidden" th:field="*{billGenerationStatus}" />
+                <input type="hidden" th:field="*{meter}" />
+
+                <!-- Meter Value Field -->
+                <div class="form-group mt-5 mb-3">
+                    <label for="meterValue" class="form-label">Edit Reading Value:</label>
+                    <input type="number" id="meterValue" class="form-control" th:field="*{meterValue}" placeholder="Enter meter reading" required />
+                </div>
+
+                <!-- Submit and Cancel Buttons -->
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                    <a th:href="@{/readings}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

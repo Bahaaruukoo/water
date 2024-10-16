@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div th:fragment="fragmentContent">
+  <h3>Edit Customer</h3>
+  <form th:action="@{/customers/update}" th:object="${customer}" method="post">
+    <!-- Hidden ID Field -->
+    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{billNumber}" />
+    <input type="hidden" th:field="*{registrationDate}" />
+    <input type="hidden" th:field="*{meter}" />
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="name">Customer Name:</label>
+        <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter Customer Name" required />
+      </div>
+
+      <div class="col-md-6">
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control" placeholder="Enter Phone Number" required />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="kebele">Kebele:</label>
+        <input type="text" id="kebele" th:field="*{kebele}" class="form-control" placeholder="Enter Kebele" required />
+      </div>
+
+      <div class="col-md-6">
+        <label for="houseNumber">House Number:</label>
+        <input type="text" id="houseNumber" th:field="*{houseNumber}" class="form-control" placeholder="Enter House Number" required />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="ordinateNumber">Ordinant Number:</label>
+        <input type="text" id="ordinateNumber" th:field="*{ordinantNumber}" class="form-control" placeholder="Enter Ordinant Number" required />
+      </div>
+      <!-- Category Dropdown -->
+      <div class="form-group col-md-6">
+        <label for="customerCategory">Category</label>
+        <select id="customerCategory" th:field="*{customerCategory}" class="form-control" required>
+          <option th:each="category : ${customerCategory}"
+                  th:value="${category}"
+                  th:text="${category}">Category</option>
+        </select>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="meterNumber">Meter:</label>
+        <input type="text" id="meterNumber" th:field="*{meter.meterNumber}" class="form-control" disabled required />
+      </div>
+
+      <!-- Status Dropdown -->
+      <div class="form-group col-6">
+        <label for="status">Service Status</label>
+        <select id="status" th:field="*{ServiceStatus}" class="form-control" required>
+          <option th:each="status : ${serviceStatuses}"
+                  th:value="${status}"
+                  th:text="${status}">Service Status</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="billNumber">Bill Number:</label>
+        <input type="text" id="billNumber" th:field="*{billNumber}" class="form-control" disabled required />
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a th:href="@{/customers}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

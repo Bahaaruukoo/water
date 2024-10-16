@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head th:replace="~{base :: base_head}">
+
+  <title>Bill Detail</title>
+  <!-- Link to external CSS file --
+  <link rel="stylesheet" th:href="@{/css/invoice.css}" /> -->
+  <!-- Print-specific styles -->
+
+</head>
+<body>
+
+<div class=" d-flex justify-content-center " th:fragment="fragmentContent">
+  <table class="printme">
+    <tr>
+      <td>
+        <img class="ms-5" src="/OromiaWaterLogo.jfif" width="75xp" alt=""/>
+      </td>
+      <td>
+        <strong>Invoice #:</strong> <span th:text="${bill.billNumber}"></span><br>
+        <strong>Invoice Date:</strong> <span th:text="${bill.invoiceDate.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}"></span><br>
+        <strong>Due Date:</strong> <span th:text="${bill.dueDate.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}"></span><br>
+        <strong>Status:</strong> <span th:text="${bill.status}"></span>
+      </td>
+    </tr>
+    <tr class=" pt-3">
+      <td class="pt-3">
+        <strong>Customer Information</strong> <span class="text-white"> </span><br>
+        <span th:text="${bill.customer.name}"></span><br>
+        Kebele: <span th:text="${bill.customer.kebele}"></span><br>
+        House No: <span th:text="${bill.customer.houseNumber}"></span><br>
+        Phone: <span th:text="${bill.customer.phoneNumber}"></span>
+      </td>
+
+      <td class="ps-4">
+        <strong>Meter Information</strong><br>
+        Mtr Number: <span th:text="${bill.meterReading.meter.meterNumber}"></span><br>
+        Mtr Size: <span th:text="${bill.meterReading.meter.meterSize}"></span><br>
+        Prev Reading: <span th:text="${bill.previousReading}"></span><br>
+        Curr Reading: <span th:text="${bill.currentReading}"></span>
+      </td>
+    </tr>
+
+    <tr class="mt-2">
+      <td><strong>Description</strong></td>
+      <td><strong>Amount</strong></td>
+    </tr>
+
+    <tr class="">
+      <td>Consumption Charge</td>
+      <td th:text="${bill.amount}">0.00</td>
+    </tr>
+    <tr class="">
+      <td>Meter Rental</td>
+      <td th:text="${bill.meterRent}">0.00</td>
+    </tr>
+    <tr class="">
+      <td>Service Charge</td>
+      <td th:text="${bill.serviceCharge}">0.00</td>
+    </tr>
+    <tr class="">
+      <td>Late Penalty</td>
+      <td th:text="${bill.penalty}">0.00</td>
+    </tr>
+    <tr class="">
+      <td>Interest</td>
+      <td th:text="${bill.interest}">0.00</td>
+    </tr>
+
+    <tr class="">
+      <td></td>
+      <td><strong>Total:</strong> <span th:text="${bill.totalBill}"></span></td>
+    </tr>
+
+    <tr>
+      <td>
+        <a class="btn btn-primary mt-5 px-3 no-print" th:if="${bill.status.equals(status)}" sec:authorize="hasAnyRole('ROLE_CASHIER')" th:href="@{'/billing/' + ${bill.id} + '/pay'}"><strong>PAY</strong></a>
+        <a class="btn btn-secondary mt-5 disabled no-print" th:if="${!bill.status.equals(status)}"
+           onclick="return confirm('Are you sure you want to reset all settings to a default setting?');">
+          <strong>PAID</strong></a>
+      </td>
+      <td>
+        <!-- Print Button -->
+        <button class="btn btn-info mt-5 px-3 no-print" onclick="window.print();"><strong>Print Invoice</strong></button>
+      </td>
+    </tr>
+  </table>
+  <br>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

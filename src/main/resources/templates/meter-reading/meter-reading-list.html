@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="">
+<head th:replace="~{base :: base_head}">
+    <title>Reading List</title></head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+<div class="" th:fragment="fragmentContent">
+    <h3 class="">Meter Reading List</h3>
+
+    <div class="row ">
+        <div class="col-md-12">
+
+            <!-- Add New Reading Button -->
+            <div class="d-flex justify-content-end mb-1">
+                <a class="btn btn-primary" th:href="@{/readings/new}">
+                    <i class="bi bi-plus-lg"></i> Add New Reading
+                </a>
+            </div>
+            <!-- Filter Form -->
+            <form class="row mb-2 form-control d-flex" method="get" th:action="@{/readings}">
+                <div class="col-md-3">
+                    <label for="meterNumber" class="form-label">Meter Number</label>
+                    <input type="text" id="meterNumber" name="meterNumber" class="form-control"
+                           th:value="${meterNumber}" placeholder="Enter meter number"/>
+                </div>
+                <div class="col-md-2">
+                    <label for="readingStartDate" class="form-label">Start Date</label>
+                    <input type="date" id="readingStartDate" name="readingStartDate" class="form-control"
+                           th:value="${readingStartDate}"/>
+                </div>
+                <div class="col-md-2">
+                    <label for="readingEndDate" class="form-label">End Date</label>
+                    <input type="date" id="readingEndDate" name="readingEndDate" class="form-control"
+                           th:value="${readingEndDate}"/>
+                </div>
+                <div class="col-md-2 ">
+                    <label for="negativeReading" class="form-label"> -ve Reading</label>
+                    <select id="negativeReading" name="negativeReading" class="form-select">
+                        <option th:value="false" th:selected="${negativeReading == 'false'}">No</option>
+                        <option th:value="true" th:selected="${negativeReading == 'true'}">Yes</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <button type="submit" class="btn btn-primary mt-2">Filter</button>
+                </div>
+            </form>
+
+            <!-- Table to Display Meter Readings -->
+            <table class="table table-hover table-bordered table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Meter Value</th>
+                    <th>Reading Date</th>
+                    <th>Reader</th>
+                    <th>Meter</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reading : ${meterReadingsPage.content}"
+                    th:classappend="${reading.negativeReading} ? 'table-danger' : ''">
+                    <td th:text="${reading.meterValue}">Meter Value</td>
+                    <td th:text="${reading.readingDate.format(T(java.time.format.DateTimeFormatter).ofPattern('dd-MM-yyyy HH:mm:ss'))}">
+                        Reading Date
+                    </td>
+                    <td th:text="${reading.reader.name}">Reader</td>
+                    <td th:text="${reading.meter.meterNumber}">Meter</td>
+
+                    <td th:if="${reading.billGenerationStatus == T(com.UserManagement.enums.BillGenerationStatus).INIT}" class="text-center">
+                        <a class="btn btn-secondary btn-sm px-3 disabled">
+                            <i class="bi bi-trash-fill"></i> Initialized
+                        </a>
+                    </td>
+                    <td th:if="${reading.billGenerationStatus == T(com.UserManagement.enums.BillGenerationStatus).VOIDED}" class="text-center">
+                        <a class="btn btn-warning " th:href="@{'/readings/edit/' + ${reading.id}}"
+                           sec:authorize="hasAnyRole('ROLE_READER')"  >
+                             Edit
+                        </a>
+                        <a class="btn btn-secondary" sec:authorize="hasAnyRole('!ROLE_READER')" >
+                            <i class="bi bi-pencil-fill"></i> Needs Edit
+                        </a>
+                    </td>
+                    <td th:if="${reading.billGenerationStatus == T(com.UserManagement.enums.BillGenerationStatus).CAPTURED}" class="text-center">
+                        <a class="btn btn-success btn-sm" th:href="@{'/billing/generate/' + ${reading.id}}"
+                           onclick="return confirm('Are you sure you want to generate bill for the reading?');"
+                           sec:authorize="!hasAnyRole('ROLE_READER')"
+                        >
+                            <i class="bi bi-trash-fill"></i> Generate Bill
+                        </a>
+                        <a class="btn btn-secondary" sec:authorize="hasAnyRole('ROLE_READER')" >
+                            <i class="bi bi-trash-fill"></i> Not Generated
+                        </a>
+                    </td>
+                    <td th:if="${reading.billGenerationStatus == T(com.UserManagement.enums.BillGenerationStatus).EDITED}" class="text-center">
+                        <a class="btn btn-success btn-sm" th:href="@{'/billing/generate/' + ${reading.id}}"
+                           onclick="return confirm('Are you sure you want to re-generate bill for the reading?');"
+                           sec:authorize="!hasAnyRole('ROLE_READER')"
+                        >
+                            <i class="bi bi-trash-fill"></i> Re-Generate Bill
+                        </a>
+                        <a class="btn btn-secondary" sec:authorize="hasAnyRole('ROLE_READER')" >
+                            <i class="bi bi-trash-fill"></i> Re-generate
+                        </a>
+                    </td>
+                    <td th:if="${reading.billGenerationStatus == T(com.UserManagement.enums.BillGenerationStatus).GENERATED}" class="text-center">
+                        Bill Created
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                        <a class="page-link"
+                           th:href="@{/readings(page=${currentPage - 1}, size=${10}, meterNumber=${meterNumber}, readingStartDate=${readingStartDate}, readingEndDate=${readingEndDate}, negativeReading=${negativeReading})}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${pageNum == currentPage} ? 'active' : ''">
+                        <a class="page-link"
+                           th:href="@{/readings(page=${pageNum}, size=${10}, meterNumber=${meterNumber}, readingStartDate=${readingStartDate}, readingEndDate=${readingEndDate}, negativeReading=${negativeReading})}"
+                           th:text="${pageNum + 1}">1</a>
+                    </li>
+                    <li th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                        <a class="page-link"
+                           th:href="@{/readings(page=${currentPage + 1}, size=${10}, meterNumber=${meterNumber}, readingStartDate=${readingStartDate}, readingEndDate=${readingEndDate}, negativeReading=${negativeReading})}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Message for Empty List -->
+            <div th:if="${#lists.isEmpty(meterReadingsPage.content)}" class="alert alert-info text-center">
+                No meter readings found.
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

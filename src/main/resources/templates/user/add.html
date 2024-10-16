@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+    <title>User</title>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+<br />
+<br />
+<div class="" th:fragment="fragmentContent">
+    <div class="card">
+        <div th:if="${param.success}">
+            <div class="alert alert-info">You've successfully updated.</div>
+        </div>
+        <div class="card-header">
+            <h2 class="text-center">Add User</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" role="form" th:action="@{/users/new/save}" th:object="${user}">
+                <div th:replace="~{common/userForm :: login-form}"></div>
+
+                <!-- Role selection dropdown -->
+                <div class="form-group mb-3">
+                    <label for="roles">Select Role(s):</label>
+                    <select id="roles" name="roles" class="form-control" th:field="*{roles}" multiple>
+                        <option th:each="role : ${allRoles}" th:value="${role.name}" th:text="${role.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <button class="btn btn-primary" type="submit">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function makePasswordRequiredOnLoad() {
+        var field = document.getElementById("password");
+        field.required = true;
+    }
+    window.onload = makePasswordRequiredOnLoad;
+</script>
+
+</body>
+</html>

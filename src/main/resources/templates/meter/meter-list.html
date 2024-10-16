@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div th:fragment="fragmentContent">
+  <h3>Meter List</h3>
+
+  <!-- Search Form -->
+  <form th:action="@{/meters}" method="get" class="form-inline my-1 form-control">
+    <div class="row">
+      <div class="col-2">
+        <input type="text" name="meterNumber" class="form-control mr-2" placeholder="Search by Meter Number" th:value="${param.meterNumber}">
+      </div>
+      <div class="col-2">
+        <button type="submit" class="btn btn-primary px-2">Search</button>
+      </div>
+      <div class="col-8 d-flex justify-content-end">
+        <a class="btn btn-primary " th:href="@{/meters/new}">Add New Meter</a>
+
+      </div>
+    </div>
+  </form>
+
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th>Meter Number</th>
+      <th>Meter Size</th>
+      <th>Brand</th>
+      <th>Model</th>
+      <th>Color</th>
+      <th>Stocked Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="meter : ${meterPage.content}">
+      <td th:text="${meter.meterNumber}">Meter Number</td>
+      <td th:text="${meter.meterSize}">Meter Size</td>
+      <td th:text="${meter.brand}">Brand</td>
+      <td th:text="${meter.model}">Model</td>
+      <td th:text="${meter.meterColor}">Color</td>
+      <td th:text="${meter.stockedDate.format(T(java.time.format.DateTimeFormatter).ofPattern('dd-MM-yyyy'))}">Stocked Date</td>
+      <td th:text="${meter.status}">Status</td>
+      <td>
+        <a class="btn btn-warning" th:href="@{'/meters/edit/' + ${meter.id}}">Edit</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <li th:classappend="${currentPage == 0} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/meters(page=${currentPage - 1}, size=${10}, meterNumber=${param.meterNumber})}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active' : ''">
+        <a class="page-link" th:href="@{/meters(page=${pageNum}, size=${10}, meterNumber=${param.meterNumber})}" th:text="${pageNum + 1}">1</a>
+      </li>
+      <li th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/meters(page=${currentPage + 1}, size=${10}, meterNumber=${param.meterNumber})}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

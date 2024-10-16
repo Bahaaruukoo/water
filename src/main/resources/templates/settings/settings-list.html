@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+  <title>Settings List</title>
+  <!-- Add any additional CSS if necessary -->
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div  th:fragment="fragmentContent">
+  <h3 class="mb-3">Settings List</h3>
+  <div class="">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-dark">
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr >
+        <td>Bill Due Date After (Days)</td>
+        <td th:text="${settings.dueDateAfter}">Due Date After</td>
+      </tr>
+      <tr >
+        <td>Meter Rental</td>
+        <td th:text="${settings.meterRentalPrice}">Due Date After</td>
+      </tr>
+      <tr>
+        <td>Late payment Fee (per day)</td>
+        <td th:text="${settings.latePaymentFee}">Late payment</td>
+      </tr>
+      <tr>
+        <td>Service Charge</td>
+        <td th:text="${settings.serviceCharge}">ServiceCharge</td>
+      </tr>
+      <tr >
+        <td>Reject Less Reading</td>
+        <td th:text="${settings.rejectLessReading}">Reject Less Reading</td>
+      </tr>
+      <tr >
+        <td>Manual Bill Generation: </td>
+        <td th:if="${settings.manualBillGeneration}">Enabled</td>
+        <td th:if="${!settings.manualBillGeneration}">Disabled</td>
+      </tr>
+      <tr >
+        <td>Auto Bill Generation Scheduled Date: </td>
+        <td th:text="${settings.billGenerationFrequency}">Bill Generation Date</td>
+      </tr>
+      </tbody>
+
+    </table>
+    <a class="btn btn-sm btn-warning px-3 me-4" th:href="@{'/settings/edit/' + ${settings.id}}">Edit Settings</a>
+    <a class="btn btn-sm btn-danger ml-2" th:href="@{'/settings/factoryReset/' + ${settings.id}}"
+       onclick="return confirm('Are you sure you want to reset all settings to a default setting?');">
+      Reset to default Settings</a>
+
+  </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Error 500 - Internal Server Error</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="container mt-3 " th:fragment="fragmentContent">
+  <div class="text-center mt-5" th:text="${errorMessage}"></div>
+  <a href="/home" class="d-flex justify-content-center">Go to Home</a>
+</div>
+</body>
+</html>

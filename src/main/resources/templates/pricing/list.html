@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Bootstrap CSS -->
+<head th:replace="~{base :: base_head}">
+    <title>Pricing List</title>
+
+</head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+<div class="" th:fragment="fragmentContent">
+<h3>Pricing List</h3>
+<table class="table table-hover table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th>Customer Category</th>
+        <th>Block One (0-5)</th>
+        <th>Block Two (6-10)</th>
+        <th>Block Three (11-15)</th>
+        <th>Block Four (16-20)</th>
+        <th>Block Five (21-25)</th>
+        <th>Block Six (>25)</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pricing : ${pricingList}">
+        <td th:text="${pricing.customerCategory}"></td>
+        <td th:text="${pricing.blockOne}"></td>
+        <td th:text="${pricing.blockTwo}"></td>
+        <td th:text="${pricing.blockThree}"></td>
+        <td th:text="${pricing.blockFour}"></td>
+        <td th:text="${pricing.blockFive}"></td>
+        <td th:text="${pricing.blockSix}"></td>
+        <td>
+            <a th:href="@{/pricing/edit/{id}(id=${pricing.id})}">Edit</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>

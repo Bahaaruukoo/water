@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="~{base :: base_head}">
+    <title>Water Bill Management System - Home</title>
+    <style>
+        .dashboard-card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .dashboard-card h4 {
+            margin-bottom: 10px;
+        }
+        .dashboard-card a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .stat-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="container mt-4">
+    <h2>Welcome to Water Bill Management System</h2>
+
+    <div class="row mt-4">
+        <!-- Quick Access Tiles -->
+        <div class="col-md-2">
+            <div class="dashboard-card">
+                <h4>Manage Bills</h4>
+                <a th:href="@{/billing}" class="btn btn-primary btn-block">View Bills</a>
+                <!--
+                <a th:href="@{#}" class="btn btn-secondary btn-block">Generate New Bill</a>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h4>Manage Customers</h4>
+                <a th:href="@{/customers}" class="btn btn-primary btn-block">View Customers</a>
+                <a th:href="@{/customers/new}" class="btn btn-secondary btn-block">Add Customer</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h4>Meter Readings</h4>
+                <a th:href="@{/readings}" class="btn btn-primary btn-block">View Readings</a>
+                <a th:href="@{/readings/new}" class="btn btn-secondary btn-block">Add New Reading</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="dashboard-card">
+                        <h4>Meters</h4>
+                        <a th:href="@{/meters}" class="btn btn-primary btn-block">View Meters</a>
+                        <a th:href="@{/meters/new}" class="btn btn-secondary btn-block">Add Meter</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dashboard-card">
+                        <h4>Settings</h4>
+                        <a th:href="@{/settings}" class="btn btn-primary btn-block">View Settings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br></br>
+    <div class="row mt-4">
+        <!-- Overview Stats Section -->
+        <div class="col-md-2">
+            <div class="stat-box">
+                <h5>Total Customers</h5>
+                <h3 th:text="${totalCustomers}">0</h3>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stat-box">
+                <h5>Total Meters</h5>
+                <h3 th:text="${totalMeters}">0</h3>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stat-box">
+                <h5>Unpaid Bills</h5>
+                <h3 th:text="${totalUnpaidBills}">0</h3>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stat-box">
+                <h5>Upcoming Due</h5>
+                <h3 th:text="${totalUpcomingDueBills}">0</h3>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stat-box">
+                <h5>Collected Bills</h5>
+                <h3 th:text="${totalCollectedAmount}">0</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Recent Activities
+        <div class="col-md-12">
+            <h4>Recent Activities</h4>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="activity : ${recentActivities}" th:text="${activity.description}">
+                    Recent Activity Example
+                </li>
+            </ul>
+        </div> -->
+    </div>
+
+    <div class="row mt-4">
+        <!-- Alerts Section -->
+        <div class="col-md-12">
+            <h4>Alerts</h4>
+            <div class="alert alert-warning d-flex" >
+                <strong>Overdue bills: </strong>
+                <p th:text="${overdueBills}">
+                    Overdue bills
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>

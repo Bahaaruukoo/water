@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+  <title>Add Pricing</title>
+</head>
+<body>
+
+<div class="" th:fragment="fragmentContent">
+  <h3 class="mb-4">Add Pricing</h3>
+  <form th:action="@{/pricing/add}" th:object="${pricing}" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="customerCategory" class="form-label">Customer Category:</label>
+      <select id="customerCategory" th:field="*{customerCategory}" class="form-select" required>
+        <option th:value="${null}">Select Category</option>
+        <option th:value="PRIVATE">Private</option>
+        <option th:value="BUSINESS">Business</option>
+        <option th:value="GOVERNMENT">Government</option>
+        <option th:value="PUBLIC">Public</option>
+        <option th:value="INDUSTRY">Industry</option>
+      </select>
+      <div class="invalid-feedback">Please select a customer category.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="blockOne" class="form-label">Block One:</label>
+      <input type="number" id="blockOne" th:field="*{blockOne}" class="form-control" required min="0" />
+      <div class="invalid-feedback">Please enter a valid price for Block One.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="blockTwo" class="form-label">Block Two:</label>
+      <input type="number" id="blockTwo" th:field="*{blockTwo}" class="form-control" required min="0" />
+      <div class="invalid-feedback">Please enter a valid price for Block Two.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="blockThree" class="form-label">Block Three:</label>
+      <input type="number" id="blockThree" th:field="*{blockThree}" class="form-control" required min="0" />
+      <div class="invalid-feedback">Please enter a valid price for Block Three.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="blockFour" class="form-label">Block Four:</label>
+      <input type="number" id="blockFour" th:field="*{blockFour}" class="form-control" required min="0" />
+      <div class="invalid-feedback">Please enter a valid price for Block Four.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="blockFive" class="form-label">Block Five:</label>
+      <input type="number" id="blockFive" th:field="*{blockFive}" class="form-control" required min="0" />
+      <div class="invalid-feedback">Please enter a valid price for Block Five.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="blockSix" class="form-label">Block Six:</label>
+      <input type="number" id="blockSix" th:field="*{blockSix}" class="form-control" required min="0" />
+      <div class="invalid-feedback">Please enter a valid price for Block Six.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Pricing</button>
+    <a href="/pricing" class="btn btn-secondary">Back to List</a>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script>
+  // Bootstrap validation
+  (function () {
+      'use strict'
+      const forms = document.querySelectorAll('.needs-validation')
+      Array.from(forms).forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+              if (!form.checkValidity()) {
+                  event.preventDefault()
+                  event.stopPropagation()
+              }
+              form.classList.add('was-validated')
+          }, false)
+      })
+  })()
+</script>
+</body>
+</html>

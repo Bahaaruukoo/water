@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+  <title>Submit Sold Bill Report</title>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+  <h3>Submit Sold Bill Report</h3>
+
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5>Report Details</h5>
+      <p><strong>Cashier:</strong> <span th:text="${report.cashier.name}"></span></p>
+      <p><strong>Period:</strong> <span th:text="${report.startDate}"></span> to <span th:text="${report.endDate}"></span></p>
+      <p><strong>Total Collection:</strong> <span th:text="${report.totalCollection}"></span></p>
+      <p><strong>Total Interest:</strong> <span th:text="${report.totalInterest}"></span></p>
+      <p><strong>Total Penalty:</strong> <span th:text="${report.totalPenalty}"></span></p>
+      <p><strong>Total Meter Rental:</strong> <span th:text="${report.totalMeterRental}"></span></p>
+
+      <form th:action="@{/reports/submit/{id}(id=${report.id})}" method="post">
+        <button type="submit" class="btn btn-success">Submit Report</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}">
+  <title>View Report</title>
+</head>
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="" th:fragment="fragmentContent">
+  <h3>Report Details</h3>
+  <div class="card mt-3">
+    <div class="card-body">
+      <!-- Report Details -->
+      <!--<p><strong>Report ID:</strong> <span th:text="${report.id}"></span></p> -->
+      <div class="row">
+        <div class="col">
+          <p><strong>Cashier:</strong> <span th:text="${report.cashier.name}"></span></p>
+          <p th:if="${report.startDate}"><strong>Report Period:</strong> <span  th:text="${report.startDate}"></span> - <span th:text="${report.endDate}"></span></p>
+          <p th:if="${report.startDate == null}"><strong>Report Period:</strong> <span> --- </span> - <span th:text="${report.endDate}"></span></p>
+          <p><strong>Status:</strong> <span th:text="${report.status}"></span></p>
+        </div>
+        <div class="col">
+          <p><strong>Total Interest:</strong> <span th:text="${report.totalInterest}"></span></p>
+          <p><strong>Total Penalty:</strong> <span th:text="${report.totalPenalty}"></span></p>
+          <p><strong>Total Meter Rental:</strong> <span th:text="${report.totalMeterRental}"></span></p>
+          <p><strong>Total Collection:</strong> <span th:text="${report.totalCollection}"></span></p>
+        </div>
+      </div>
+
+      <!-- Bills included in the report -->
+      <h4>Bills included In this sale report</h4>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">Customer</th>
+          <th scope="col">Consumption</th>
+          <th scope="col">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bill : ${report.bills}">
+          <td th:text="${bill.customer.name}"></td>
+          <td th:text="${bill.consumption }"></td>
+          <td th:text="${bill.totalBill}"></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Action Buttons -->
+      <div class="mt-4" th:if="${report.status == T(com.UserManagement.enums.AuditStatus).SUBMITTED}">
+        <!-- Audit Report Button (Visible when status is SUBMITTED) -->
+
+        <form th:action="@{/reports/audit/{id}(id=${report.id})}" method="post">
+          <button type="submit" class="btn btn-success" name="action" value="AUDIT">Approve Report</button>
+          <button type="submit" class="btn btn-danger" name="action" value="REJECT">Reject Report</button>
+        </form>
+
+      </div>
+      <div>
+
+        <p th:if="${report.status == T(com.UserManagement.enums.AuditStatus).AUDITED}" class="bg-success mt-3 py-2 ps-3">
+          This report has been approved on <span th:text="${report.auditedDate}"></span>. By: <span th:text="${report.auditor.name}"></span>
+        </p>
+        <p th:if="${report.status == T(com.UserManagement.enums.AuditStatus).REJECTED}" class="bg-danger mt-3 py-2 ps-3">
+          This report was rejected on <strong th:text="${report.auditedDate.format(T(java.time.format.DateTimeFormatter).ofPattern('dd-MM-yyyy'))}"></strong> by <span th:text="${report.auditor.name}"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+</body>
+</html>

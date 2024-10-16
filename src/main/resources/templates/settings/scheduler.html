@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div th:fragment="fragmentContent">
+        <form action="#" th:action="@{/settings/schedule} " method="post">
+            <!--
+            <div class="form-group">
+                <div class="row form-control d-flex">
+                    <h5>Sale Report Generation</h5>
+                    <div class="col-2">
+                        <label for="reportFrequency">Frequency:</label>
+                        <select id="reportFrequency" name="SaleReportFrequency" class="form-select" required>
+                            <option value="" disabled selected>Select Frequency</option>
+                            <option value="DAILY">Daily</option>
+                            <option value="WEEKLY_1">Weekly Monday</option>
+                            <option value="WEEKLY_2">Weekly Tuesday</option>
+                            <option value="WEEKLY_3">Weekly Wednesday</option>
+                            <option value="WEEKLY_4">Weekly Thursday</option>
+                            <option value="WEEKLY_5">Weekly Friday</option>
+                            <option value="WEEKLY_6">Weekly Saturday</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <label for="reportHour"> Hour:</label>
+                        <select id="reportHour" name="reportHour" class="form-select" required>
+                            <option value="" disabled selected>Select Hour</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <label for="reportMinute">Minute:</label>
+                        <select id="reportMinute" name="reportMinute" class="form-select" required>
+                            <option value="" disabled selected>Select minute</option>
+                            <option value="0">0</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            -->
+            <div class="row form-control d-flex mt-3 py-2">
+                <h5>Bill Generation Frequency:</h5>
+                <p >Choose Monthly Date on which the bills auto generated.</p>
+                <div class="col-2">
+                    <div class="form-group">
+                        <select id="billFrequency" name="billGenerationFrequency" class="form-select" required>
+                            <option value="" disabled selected>Frequency</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Set Schedule</button>
+        </form>
+
+
+    </div>
+
+</body>
+</html>

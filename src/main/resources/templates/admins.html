@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{base :: base_head}">
+    <title>Admin Dashboard</title>
+    <!-- Add any additional CSS here if necessary -->
+
+</head>
+<body >
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-3">
+            <h2 class="mb-3">Dashboard</h2>
+            <!-- Sidebar Links -->
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active">
+                    Dashboard
+                </a>
+
+                <!-- User Management Links -->
+                <a href="#userManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_ADMIN')" >
+                    User Management
+                </a>
+                <div class="collapse" id="userManagementSubmenu">
+                    <a th:href="@{/users}" class="list-group-item list-group-item-action ml-3">View All Users</a>
+                    <a th:href="@{/users/new}" class="list-group-item list-group-item-action ml-3">Add New User</a>
+                </div>
+
+                <!-- Meter Management Links -->
+                <a href="#meterManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_USER')" >
+                    Meter Management
+                </a>
+                <div class="collapse" id="meterManagementSubmenu">
+                    <a th:href="@{/meters}" class="list-group-item list-group-item-action ml-3">View All Meters</a>
+                    <a th:href="@{/meters/new}" class="list-group-item list-group-item-action ml-3">Add New Meter</a>
+                </div>
+
+                <!-- Customer Management Links -->
+                <a href="#customerManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_USER')" >
+                    Customer Management
+                </a>
+                <div class="collapse" id="customerManagementSubmenu">
+                    <a th:href="@{/customers}" class="list-group-item list-group-item-action ml-3">View All Customers</a>
+                    <a th:href="@{/customers/new}" class="list-group-item list-group-item-action ml-3">Add New Customer</a>
+                </div>
+
+                <!-- Meter Reading Management Links -->
+                <a href="#readingManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_READER', 'ROLE_CASHIER')" >
+                    Meter Reading Management
+                </a>
+                <div class="collapse" id="readingManagementSubmenu">
+                    <a th:href="@{/readings}" class="list-group-item list-group-item-action ml-3">View All Readings</a>
+                    <a th:href="@{/readings/new}" class="list-group-item list-group-item-action ml-3"
+                       sec:authorize="hasAnyRole('ROLE_READER')">Add New Reading</a>
+                </div>
+
+                <!-- Bill Management Links -->
+                <a href="#billManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_CASHIER')">
+                    Bill Management
+                </a>
+                <div class="collapse" id="billManagementSubmenu">
+                    <a th:href="@{/billing}" class="list-group-item list-group-item-action ml-3">View All Bills</a>
+                    <a th:href="@{#}" class="list-group-item list-group-item-action ml-3"
+                       sec:authorize="hasAnyRole('ROLE_CASHIER')">Generate Bill</a>
+                </div>
+
+                <!-- Report Management Links -->
+                <a href="#reportManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                    Report Management
+                </a>
+                <div class="collapse" id="reportManagementSubmenu">
+                    <a th:href="@{/billing/reports/sold}" class="list-group-item list-group-item-action ml-3">Monthly Sold Bills</a>
+                    <a th:href="@{/billing/reports/unsold}" class="list-group-item list-group-item-action ml-3">Monthly Unsold Bills</a>
+                    <a th:href="@{/billing/reports/voided}" class="list-group-item list-group-item-action ml-3">Monthly Voided Bills</a>
+                    <a th:href="@{/billing/kebele-category-report}" class="list-group-item list-group-item-action ml-3">Analysis Sheet</a>
+                </div>
+                <!-- Sales Management Links -->
+                <a href="#salesManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_CASHIER')">
+                    Sales Management
+                </a>
+                <div class="collapse" id="salesManagementSubmenu">
+                    <a th:href="@{/reports/list}" class="list-group-item list-group-item-action ml-3 ">My Reports</a>
+                    <a th:href="@{/reports/allsold/create}" class="list-group-item list-group-item-action ml-3 ">Create Sale Report</a>
+                    <a th:href="@{/reports/audit-list}" class="list-group-item list-group-item-action ml-3 ">Reports</a>
+                </div>
+
+                <!-- Settings -->
+                <a href="#settingManagementSubmenu" class="list-group-item list-group-item-action" data-toggle="collapse"
+                   sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                    Settings
+                </a>
+                <div class="collapse" id="settingManagementSubmenu" >
+                    <a th:href="@{/pricing}" class="list-group-item list-group-item-action ml-3">Price Setting</a>
+                    <a th:href="@{/settings/schedule}" class="list-group-item list-group-item-action ml-3">Schedule Tasks</a>
+                    <a th:href="@{/settings}" class="list-group-item list-group-item-action ml-3">More Settings</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <!-- Admin Content Section -->
+            <div class="card" >
+
+                <div class="card-body">
+                   <!-- <p>Select an option from the sidebar to manage users, customers, meters, bills, and more.</p> -->
+
+                    <div th:insert="~{${content} :: fragmentContent}"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{base :: base_footer}"></footer>
+
+
+</body>
+</html>

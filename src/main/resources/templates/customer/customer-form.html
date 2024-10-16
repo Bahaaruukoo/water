@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: base_head}"></head>
+
+<body>
+<nav th:replace="~{base :: base_navbar}"></nav>
+
+<div th:fragment="fragmentContent">
+    <h2 th:text="${customer.id != null ? 'Edit Customer' : 'New Customer'}"></h2>
+    <form th:action="@{/customers/save}" th:object="${customer}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Customer Name:</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter customer name" required />
+            </div>
+            <div class="col-md-6">
+                <label for="phoneNumber" class="form-label">Phone Number:</label>
+                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control" placeholder="Enter phone number" required />
+                <p th:errors="*{phoneNumber}" class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}">
+
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="kebele" class="form-label">Kebele:</label>
+                <input type="text" id="kebele" th:field="*{kebele}" class="form-control" placeholder="Enter kebele" required />
+            </div>
+            <div class="col-md-6">
+                <label for="houseNumber" class="form-label">House Number:</label>
+                <input type="text" id="houseNumber" th:field="*{houseNumber}" class="form-control" placeholder="Enter house number" required />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="ordinantNumber" class="form-label">Ordinant Number:</label>
+                <input type="text" id="ordinantNumber" th:field="*{ordinantNumber}" class="form-control" placeholder="Enter ordinant number" required />
+            </div>
+            <!-- Category Dropdown -->
+            <div class="form-group col-md-6">
+                <label for="customerCategory">Category</label>
+                <select id="customerCategory" th:field="*{customerCategory}" class="form-control" required>
+                    <option th:each="category : ${customerCategory}"
+                            th:value="${category}"
+                            th:text="${category}">Category</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+
+            <!-- Status Dropdown -->
+            <div class="form-group col-6">
+                <label for="status">Status</label>
+                <select id="status" th:field="*{ServiceStatus}" class="form-control" required>
+                    <option th:each="status : ${serviceStatuses}"
+                            th:value="${status}"
+                            th:text="${status}">Service Status</option>
+                </select>
+            </div>
+            <!-- Meter Dropdown -->
+            <div class="form-group mb-3 col-6">
+                <label for="meter" class="form-label">Meter:</label>
+                <select id="meter" class="form-select" th:field="*{meter}" required>
+                    <option th:each="meter : ${meters}" th:value="${meter.id}" th:text="${meter.meterNumber}">Select Meter</option>
+                </select>
+            </div>
+
+
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/customers}" class="btn btn-secondary">Back to Customer List</a>
+        </div>
+    </form>
+</div>
+<footer th:replace="~{base :: base_footer}"></footer>
+
+</body>
+</html>
