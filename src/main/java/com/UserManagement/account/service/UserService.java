@@ -1,8 +1,10 @@
 package com.UserManagement.account.service;
 
+import com.UserManagement.account.Dto.AuthenticationRequest;
 import com.UserManagement.account.Dto.UserDto;
 import com.UserManagement.account.Dto.UserEditDto;
 import com.UserManagement.account.Entity.User;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -27,4 +29,6 @@ public interface UserService {
     User getLoggedInUser();
 
 	void updateUser(User existingUser);
+
+	void saveAccountAdmin( AuthenticationRequest authenticationRequest);
 }

@@ -12,4 +12,5 @@ public class UserManagement2Application {
 		SpringApplication.run(UserManagement2Application.class, args);
 	}
 
+
 }

@@ -1,5 +1,6 @@
 package com.UserManagement.account.Controller;
 
+import com.UserManagement.account.Dto.AuthenticationRequest;
 import com.UserManagement.account.Dto.PasswordChangeForm;
 import com.UserManagement.account.Dto.UserDto;
 import com.UserManagement.account.Dto.UserEditDto;
@@ -52,6 +53,10 @@ public class AuthController {
 
 	@GetMapping("/login")
 	public String loginForm() {
+		if (userService.findAllUsers().size() == 0){
+			return "redirect:/system/setup/register";
+		}
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.isAuthenticated()
 				&& !"anonymousUser".equals(authentication.getPrincipal())) {
@@ -65,49 +70,50 @@ public class AuthController {
 		return "login_";
 	}
 
-	@GetMapping("/users/register")
+	@GetMapping("/system/setup/register")
 	public String showRegistrationForm(Model model) {
+		if (userService.findAllUsers().size() > 0){
+			return "redirect:/login";
+		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDto user = new UserDto();
-		model.addAttribute("user", user);
+		model.addAttribute("user", new AuthenticationRequest());//user);
 		if (authentication != null
 				&& authentication.isAuthenticated()
 				&& !"anonymousUser".equals(authentication.getPrincipal())) {
-			return "redirect:/users";
+			return "redirect:/home";
 		} else {
-
 			return "register";
 		}
 	}
 
-	@PostMapping("/users/register/save")
+	@PostMapping("/system/setup/register/admin/save")
 	public String registration(
-			@Valid @ModelAttribute("user") UserDto userDto,
+			@Valid @ModelAttribute("user") AuthenticationRequest authenticationRequest,
 			BindingResult result,
 			Model model) {
-
-		User existingUser = userService.findUserByEmail(userDto.getEmail());
+		User existingUser = userService.findUserByEmail(authenticationRequest.getEmail());
 
 		if (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) {
 			result.rejectValue("email", null,
 					"There is already an account registered with the same email");
 		}
 
-		if (!userDto.getPassword().isEmpty()) {
-			if (userDto.getPassword().length() < 7) {
-				result.rejectValue("password", "field.min.length", "Password should have at least 7 characters");
+		if (!authenticationRequest.getPassword().isEmpty()) {
+			if (authenticationRequest.getPassword().length() < 8) {
+				result.rejectValue("password", "field.min.length", "Password should have at least 8 characters");
 			}
 		}else{
 			result.rejectValue("password", "field.min.length", "Password should not be empty.");
 		}
 
 		if (result.hasErrors()) {
-			model.addAttribute("user", userDto);
+			model.addAttribute("user", authenticationRequest);
 			return "register";
 		}
 
-		userService.saveUser(userDto);
-		return "redirect:/register?success=true";
+		userService.saveAccountAdmin(authenticationRequest);
+		return "redirect:/login"; //?success=true";
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -130,7 +136,6 @@ public class AuthController {
 		}else{
 			result.rejectValue("password", "field.min.length", "Password should not be empty.");
 		}
-
 		if (result.hasErrors()) {
 			model.addAttribute("user", userDto);
 			List<Role> allRoles = roleRepository.findAll();
@@ -139,7 +144,6 @@ public class AuthController {
 
 			return "admins";
 		}
-
 		userService.saveUser(userDto);
 		return "redirect:/users?success=true";
 	}
@@ -259,5 +263,4 @@ public class AuthController {
 
 		return "redirect:/user/profile";
 	}
-
 }

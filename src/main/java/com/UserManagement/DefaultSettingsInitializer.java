@@ -10,6 +10,7 @@ import com.UserManagement.billsystem.entities.Settings;
 import com.UserManagement.billsystem.repositories.PricingRepository;
 import com.UserManagement.billsystem.repositories.SettingsRepository;
 import com.UserManagement.enums.CustomerCategory;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ public class DefaultSettingsInitializer {
                                       PasswordEncoder passwordEncoder,
                                       RoleRepository roleRepository
                                       ) {
+
         this.settingsRepository = settingsRepository;
         this.pricingRepository = pricingRepository;
         this.userService = userService;
@@ -44,6 +46,7 @@ public class DefaultSettingsInitializer {
         this.roleRepository = roleRepository;
     }
     //@Bean
+    @Transactional
     public void initializeDefaultSettings() { //public ApplicationRunner initializeDefaultSettings() {
         //return args -> {
             if (settingsRepository.findAll().size() == 0) {
@@ -91,30 +94,30 @@ public class DefaultSettingsInitializer {
                 roleRepository.saveAll(roles);
             }
             //set root admin account
-            if(userService.findUserByEmail("rootadmin@tuma.com") == null){
-                List<Role> allRoles = new ArrayList<>();
-                allRoles.addAll(roleRepository.findAll());
+            if(userRepository.findByEmail("rootadmin@tuma.com") == null){
 
-                //createSysAdmin(allRoles);
+                //createDefaultSysAdmin();
+
             }
             // Add more default settings as needed
     }
-
-    @Transactional
-    private void createSysAdmin(List<Role> allRoles){
+    
+    private void createDefaultSysAdmin(){
 
         User user = new User();
-
         user.setName("System Root Admin");
         user.setPhone("0000000000");
         user.setEmail("rootadmin@tuma.com");
         user.setPassword(passwordEncoder.encode("admin123"));
         user.setAddress("System");
-        user.setAge(0);
+        user.setAge(10);
         user.setGender("System");
 
-        user.setRoles(allRoles);
+        List<Role> roles = new ArrayList<>();
+        Role role = roleRepository.findByName("ROLE_ADMIN");
+        roles.add(role);
 
+        user.setRoles(roles);
         userRepository.save(user);
 
     }

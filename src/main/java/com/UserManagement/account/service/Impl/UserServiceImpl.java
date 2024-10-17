@@ -1,5 +1,6 @@
 package com.UserManagement.account.service.Impl;
 
+import com.UserManagement.account.Dto.AuthenticationRequest;
 import com.UserManagement.account.Dto.UserEditDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(UserDto userDto) {
+
         User user = new User();
         user.setName(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());
@@ -156,5 +158,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         userRepository.save(user);  // Save updated user
+    }
+
+    @Override
+    public void saveAccountAdmin(AuthenticationRequest authenticationRequest) {
+
+        User user = new User();
+        user.setName("System Root Admin");
+        user.setPhone("0000000000");
+        user.setEmail(authenticationRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(authenticationRequest.getPassword()));
+        user.setAddress("System");
+        user.setAge(10);
+        user.setGender("System");
+        user.setFirstLogin(false);
+
+        List<Role> roles = roleRepository.findAll();
+
+        user.setRoles(roles);
+        userRepository.save(user);
+
     }
 }

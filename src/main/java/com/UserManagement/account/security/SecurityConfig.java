@@ -70,6 +70,7 @@ public class SecurityConfig {
                         // Permit access to these URLs for everyone
                         .requestMatchers("/", "/login", "/webjars/**", "/register/**", "/forgot/**", "/index").permitAll()
                         // Protect web application endpoints
+                        .requestMatchers("system/setup/**").permitAll()
                         .requestMatchers("/users/**", "/edit/**", "/add/**", "/delete/**","/settings/**").hasRole("ADMIN")
                         .requestMatchers("/billing/void/**").hasAnyRole("MANAGER")
                         .requestMatchers("/billing", "/billing/view/**").hasAnyRole("ADMIN", "CASHIER", "MANAGER")
